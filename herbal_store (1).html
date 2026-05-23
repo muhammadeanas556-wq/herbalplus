@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HerbalPlus – Natural Growth & Wellness</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1a6b3c;
+  --green-light: #27a05a;
+  --green-pale: #e8f5ee;
+  --gold: #c8972a;
+  --gold-light: #f0c96a;
+  --cream: #faf7f0;
+  --dark: #1a1a1a;
+  --gray: #6b7280;
+  --white: #ffffff;
+  --shadow: 0 4px 24px rgba(26,107,60,0.13);
+  --radius: 16px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--dark); }
+a { text-decoration:none; color:inherit; }
+
+/* ===== NAVBAR ===== */
+nav {
+  background:var(--white);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  position:sticky; top:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px; height:64px;
+}
+.logo { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:var(--green); }
+.logo span { color:var(--gold); }
+.nav-links { display:flex; gap:24px; align-items:center; }
+.nav-links a { font-size:.93rem; font-weight:500; color:var(--dark); transition:.2s; }
+.nav-links a:hover { color:var(--green); }
+.nav-btn { background:var(--green); color:#fff!important; padding:9px 20px; border-radius:50px; font-size:.88rem!important; }
+.nav-btn:hover { background:var(--green-light)!important; }
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+.hamburger span { width:25px; height:2px; background:var(--dark); border-radius:2px; }
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, #0d4a28 0%, #1a6b3c 50%, #27a05a 100%);
+  color:#fff;
+  padding: 80px 24px 60px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(200,151,42,.18) 0%, transparent 60%);
+}
+.hero-tag { display:inline-block; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); border-radius:50px; padding:6px 18px; font-size:.82rem; letter-spacing:.07em; text-transform:uppercase; margin-bottom:18px; }
+.hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.4rem); font-weight:900; line-height:1.18; margin-bottom:18px; }
+.hero h1 span { color:var(--gold-light); }
+.hero p { font-size:1.05rem; opacity:.88; max-width:520px; margin:0 auto 32px; }
+.hero-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:13px 26px; border-radius:50px; font-weight:600; font-size:.95rem; cursor:pointer; border:none; transition:.22s; }
+.btn-white { background:#fff; color:var(--green); }
+.btn-white:hover { background:var(--gold-light); }
+.btn-outline { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.6); }
+.btn-outline:hover { background:rgba(255,255,255,.12); }
+.btn-wa { background:#25d366; color:#fff; }
+.btn-wa:hover { background:#1ebe59; }
+.trust-row { display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-top:44px; }
+.trust-item { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); border-radius:12px; padding:10px 18px; font-size:.82rem; display:flex; align-items:center; gap:7px; }
+
+/* ===== SECTIONS ===== */
+section { padding:64px 24px; max-width:1140px; margin:0 auto; }
+.section-title { font-family:'Playfair Display',serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:700; text-align:center; margin-bottom:8px; }
+.section-sub { text-align:center; color:var(--gray); margin-bottom:40px; font-size:.97rem; }
+
+/* ===== PRODUCTS GRID ===== */
+.products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:24px; }
+.product-card {
+  background:var(--white);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:.22s;
+  position:relative;
+}
+.product-card:hover { transform:translateY(-4px); box-shadow:0 8px 36px rgba(26,107,60,.18); }
+.product-img { width:100%; height:200px; object-fit:cover; background:var(--green-pale); display:flex; align-items:center; justify-content:center; font-size:3.5rem; }
+.product-body { padding:18px; }
+.product-badge { display:inline-block; background:var(--green-pale); color:var(--green); font-size:.75rem; font-weight:600; border-radius:50px; padding:3px 11px; margin-bottom:8px; }
+.product-title { font-family:'Playfair Display',serif; font-size:1.08rem; font-weight:700; margin-bottom:6px; }
+.product-desc { font-size:.84rem; color:var(--gray); margin-bottom:12px; line-height:1.5; }
+.product-footer { display:flex; align-items:center; justify-content:space-between; }
+.price { font-size:1.15rem; font-weight:700; color:var(--green); }
+.stars { color:var(--gold); font-size:.85rem; }
+.btn-buy { background:var(--green); color:#fff; padding:8px 18px; border-radius:50px; font-size:.85rem; font-weight:600; border:none; cursor:pointer; transition:.2s; }
+.btn-buy:hover { background:var(--green-light); }
+
+/* ===== QUIZ SECTION ===== */
+.quiz-section {
+  background: linear-gradient(135deg, var(--green) 0%, #0d4a28 100%);
+  border-radius:24px;
+  padding:52px 32px;
+  text-align:center;
+  color:#fff;
+  margin:0 auto;
+  max-width:1140px;
+}
+.quiz-section h2 { font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:10px; }
+.quiz-section p { opacity:.87; margin-bottom:28px; }
+
+/* ===== REVIEWS ===== */
+.reviews-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:20px; }
+.review-card { background:var(--white); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); }
+.review-name { font-weight:700; margin-bottom:4px; }
+.review-text { font-size:.88rem; color:var(--gray); line-height:1.55; }
+
+/* ===== WHATSAPP STICKY ===== */
+.wa-sticky {
+  position:fixed; bottom:22px; right:22px; z-index:999;
+  background:#25d366; color:#fff;
+  width:58px; height:58px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.6rem;
+  box-shadow:0 4px 18px rgba(37,211,102,.45);
+  animation: pulse 2.2s infinite;
+  cursor:pointer;
+}
+@keyframes pulse { 0%,100%{box-shadow:0 4px 18px rgba(37,211,102,.45)} 50%{box-shadow:0 4px 32px rgba(37,211,102,.7)} }
+
+/* ===== CONTACT ===== */
+.contact-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; }
+.contact-card { background:var(--white); border-radius:var(--radius); padding:28px 20px; text-align:center; box-shadow:var(--shadow); }
+.contact-icon { font-size:2rem; margin-bottom:10px; }
+.contact-card h3 { font-weight:700; margin-bottom:6px; }
+.contact-card p { font-size:.88rem; color:var(--gray); margin-bottom:14px; }
+.btn-contact { display:inline-block; background:var(--green); color:#fff; padding:9px 22px; border-radius:50px; font-size:.87rem; font-weight:600; transition:.2s; }
+.btn-contact:hover { background:var(--green-light); }
+
+/* ===== FOOTER ===== */
+footer {
+  background:var(--dark);
+  color:#fff;
+  padding:40px 24px 20px;
+  text-align:center;
+}
+footer .logo { color:#fff; font-size:1.3rem; margin-bottom:8px; display:block; }
+footer p { font-size:.84rem; opacity:.6; margin-bottom:18px; }
+footer .footer-links { display:flex; gap:18px; justify-content:center; flex-wrap:wrap; font-size:.84rem; opacity:.7; }
+
+/* ===== ADMIN PANEL ===== */
+#admin-overlay {
+  display:none;
+  position:fixed; inset:0; z-index:2000;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(3px);
+}
+#admin-panel {
+  position:fixed; top:0; right:0; bottom:0;
+  width:min(540px,100vw);
+  background:var(--white);
+  z-index:2001;
+  overflow-y:auto;
+  box-shadow:-8px 0 40px rgba(0,0,0,.18);
+  display:none;
+  flex-direction:column;
+}
+.admin-header {
+  background: linear-gradient(135deg, var(--green), #0d4a28);
+  color:#fff; padding:20px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.admin-header h2 { font-family:'Playfair Display',serif; font-size:1.3rem; }
+.admin-close { background:rgba(255,255,255,.2); border:none; color:#fff; width:34px; height:34px; border-radius:50%; font-size:1.1rem; cursor:pointer; }
+.admin-tabs { display:flex; border-bottom:2px solid #eee; }
+.admin-tab { flex:1; padding:13px; text-align:center; font-size:.88rem; font-weight:600; cursor:pointer; color:var(--gray); border-bottom:3px solid transparent; margin-bottom:-2px; transition:.2s; }
+.admin-tab.active { color:var(--green); border-bottom-color:var(--green); }
+.admin-body { padding:20px; flex:1; }
+.admin-section { display:none; }
+.admin-section.active { display:block; }
+
+/* Product list in admin */
+.admin-product-item {
+  background:var(--green-pale);
+  border-radius:12px;
+  padding:14px 16px;
+  margin-bottom:12px;
+  display:flex; align-items:center; gap:14px;
+}
+.admin-product-item .prod-emoji { font-size:1.8rem; }
+.admin-product-item .prod-info { flex:1; }
+.admin-product-item .prod-name { font-weight:700; font-size:.95rem; }
+.admin-product-item .prod-price { font-size:.85rem; color:var(--green); font-weight:600; }
+.admin-actions { display:flex; gap:8px; }
+.btn-edit { background:var(--gold); color:#fff; border:none; padding:7px 14px; border-radius:8px; font-size:.8rem; cursor:pointer; font-weight:600; }
+.btn-delete { background:#e53e3e; color:#fff; border:none; padding:7px 14px; border-radius:8px; font-size:.8rem; cursor:pointer; font-weight:600; }
+.btn-edit:hover { background:#b8821e; }
+.btn-delete:hover { background:#c53030; }
+
+/* Forms */
+.form-group { margin-bottom:16px; }
+.form-group label { display:block; font-size:.85rem; font-weight:600; margin-bottom:6px; color:var(--dark); }
+.form-group input, .form-group textarea, .form-group select {
+  width:100%; padding:10px 14px; border:1.5px solid #ddd; border-radius:10px;
+  font-family:'DM Sans',sans-serif; font-size:.93rem; color:var(--dark);
+  transition:.2s; outline:none;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--green); }
+.form-group textarea { height:90px; resize:vertical; }
+.btn-save { width:100%; background:var(--green); color:#fff; padding:12px; border:none; border-radius:12px; font-size:.97rem; font-weight:700; cursor:pointer; transition:.2s; }
+.btn-save:hover { background:var(--green-light); }
+.btn-add-new { width:100%; background:var(--gold); color:#fff; padding:11px; border:none; border-radius:12px; font-size:.93rem; font-weight:700; cursor:pointer; margin-bottom:20px; transition:.2s; }
+.btn-add-new:hover { background:#b8821e; }
+.edit-form { background:#f8faf9; border-radius:14px; padding:18px; margin-top:16px; border:1.5px solid var(--green-pale); }
+.edit-form h3 { font-family:'Playfair Display',serif; font-size:1.05rem; margin-bottom:14px; color:var(--green); }
+
+.img-upload-box {
+  border:2px dashed #c0d9ca; border-radius:12px; padding:18px; text-align:center;
+  cursor:pointer; background:#f8faf9; transition:.2s; position:relative; overflow:hidden;
+}
+.img-upload-box:hover { border-color:var(--green); background:var(--green-pale); }
+.img-upload-box input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+.img-preview { width:100%; height:130px; object-fit:cover; border-radius:10px; margin-top:10px; display:none; }
+.img-upload-label { font-size:.85rem; color:var(--gray); pointer-events:none; }
+.img-upload-label span { color:var(--green); font-weight:600; }
+/* Order form */
+.order-item {
+  background:var(--green-pale); border-radius:12px; padding:14px 16px; margin-bottom:10px;
+}
+.order-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+.order-item-name { font-weight:700; font-size:.93rem; }
+.order-status { font-size:.78rem; font-weight:700; padding:3px 10px; border-radius:50px; }
+.status-pending { background:#fff3cd; color:#856404; }
+.status-shipped { background:#d1e7dd; color:#0a5f38; }
+.status-delivered { background:#cfe2ff; color:#084298; }
+.order-item-detail { font-size:.83rem; color:var(--gray); }
+.btn-status { background:#fff; border:1.5px solid #ddd; border-radius:8px; padding:4px 10px; font-size:.78rem; cursor:pointer; font-weight:600; transition:.2s; }
+.btn-status:hover { border-color:var(--green); color:var(--green); }
+@media(max-width:700px){
+  .nav-links { display:none; }
+  .nav-links.open { display:flex; flex-direction:column; position:absolute; top:64px; left:0; right:0; background:#fff; padding:16px 24px; gap:14px; box-shadow:0 4px 16px rgba(0,0,0,.1); }
+  .hamburger { display:flex; }
+  .hero { padding:52px 18px 44px; }
+  section { padding:44px 16px; }
+  .quiz-section { padding:36px 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Herbal<span>Plus</span></div>
+  <div class="nav-links" id="navLinks">
+    <a href="#shop">Shop</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#results">Results</a>
+    <a href="#contact">Contact</a>
+    <a href="#" class="nav-btn" onclick="openAdmin()">⚙️ Admin</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🌿 100% Natural & Herbal</div>
+  <h1>Natural Herbal Solutions for<br><span>Height Growth & Wellness</span></h1>
+  <p>Trusted by thousands of Pakistani families. Pure herbal ingredients. Fast delivery across Pakistan.</p>
+  <div class="hero-btns">
+    <a href="https://wa.me/923107851364?text=Hello%2C%20I%20want%20a%20consultation" target="_blank" class="btn btn-wa">💬 WhatsApp Us</a>
+    <a href="#shop" class="btn btn-white">🛍️ Shop Now</a>
+    <a href="tel:03107851364" class="btn btn-outline">📞 Call Now</a>
+  </div>
+  <div class="trust-row">
+    <div class="trust-item">🚚 Cash on Delivery</div>
+    <div class="trust-item">🌿 Natural Ingredients</div>
+    <div class="trust-item">📞 24/7 Support</div>
+    <div class="trust-item">⚡ Fast Delivery</div>
+    <div class="trust-item">🔒 Secure Payment</div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="shop">
+  <div class="section-title">Our Best Products</div>
+  <div class="section-sub">Trusted herbal formulas for real results</div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- QUIZ -->
+<section style="padding:0 24px 64px; max-width:1140px; margin:0 auto;">
+  <div class="quiz-section" id="quiz">
+    <h2>Find the Right Product for You</h2>
+    <p>Answer a few questions and get a personalized herbal recommendation</p>
+    <button class="btn btn-white" onclick="startQuiz()">🧠 Start AI Quiz</button>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="results">
+  <div class="section-title">Customer Results</div>
+  <div class="section-sub">Real customers, real transformations</div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <div class="review-name">Ahmed Raza – Lahore</div>
+      <div class="review-text">"Grew 2 inches in 3 months using the height growth kit. Very happy with results. Delivery was fast too."</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <div class="review-name">Fatima Noor – Karachi</div>
+      <div class="review-text">"The hair care serum is amazing. My hair feels so much thicker and healthier after just 6 weeks!"</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <div class="review-name">Usman Ali – Faisalabad</div>
+      <div class="review-text">"Best energy booster I've tried. All natural, no side effects. I recommend it to everyone in my family."</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★☆</div>
+      <div class="review-name">Sara Khan – Islamabad</div>
+      <div class="review-text">"Weight gain supplement worked great for me. Gained healthy weight in 2 months. Great customer support too."</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-title">Contact Us</div>
+  <div class="section-sub">We're here to help – reach us anytime</div>
+  <div class="contact-grid">
+    <div class="contact-card">
+      <div class="contact-icon">💬</div>
+      <h3>WhatsApp</h3>
+      <p>Chat with us directly for fast support and consultations</p>
+      <a href="https://wa.me/923107851364?text=Hello%2C%20I%20need%20help" target="_blank" class="btn-contact">Chat on WhatsApp</a>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">📞</div>
+      <h3>Call Us</h3>
+      <p>Speak to our team directly: <strong>0310-7851364</strong></p>
+      <a href="tel:03107851364" class="btn-contact">Call Now</a>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">📧</div>
+      <h3>Email</h3>
+      <p>Send us your queries and we'll respond within 24 hours</p>
+      <a href="mailto:plusherbal30@gmail.com" class="btn-contact">Send Email</a>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">🕐</div>
+      <h3>Business Hours</h3>
+      <p>Mon – Sat: 9am – 9pm<br>Sunday: 10am – 6pm</p>
+      <a href="https://wa.me/923107851364" target="_blank" class="btn-contact">Message Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="logo">Herbal<span style="color:var(--gold)">Plus</span></span>
+  <p>Natural herbal products for height growth, hair care, weight gain & energy. Pakistan's trusted wellness brand.</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Refund Policy</a>
+    <a href="#">Terms & Conditions</a>
+    <a href="https://wa.me/923107851364" target="_blank">WhatsApp</a>
+    <a href="tel:03107851364">0310-7851364</a>
+    <a href="mailto:plusherbal30@gmail.com">plusherbal30@gmail.com</a>
+  </div>
+  <p style="margin-top:18px; font-size:.75rem; opacity:.4;">© 2025 HerbalPlus. All rights reserved.</p>
+</footer>
+
+<!-- WHATSAPP STICKY -->
+<a href="https://wa.me/923107851364?text=Hello%2C%20I%20want%20to%20order" target="_blank" class="wa-sticky" title="Chat on WhatsApp">💬</a>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="admin-overlay" onclick="closeAdmin()"></div>
+<div id="admin-panel">
+  <div class="admin-header">
+    <h2>⚙️ Admin Panel</h2>
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+  </div>
+  <div class="admin-tabs">
+    <div class="admin-tab active" onclick="switchTab('products')">🛍️ Products</div>
+    <div class="admin-tab" onclick="switchTab('add')">➕ Add New</div>
+    <div class="admin-tab" onclick="switchTab('orders')">📦 Orders</div>
+  </div>
+  <div class="admin-body">
+
+    <!-- PRODUCTS TAB -->
+    <div class="admin-section active" id="tab-products">
+      <p style="font-size:.85rem; color:var(--gray); margin-bottom:14px;">Tap <strong>Edit</strong> to change name/price or <strong>Delete</strong> to remove.</p>
+      <div id="adminProductList"></div>
+      <div class="edit-form" id="editFormWrapper" style="display:none;">
+        <h3 id="editFormTitle">Edit Product</h3>
+        <div class="form-group">
+          <label>Product Image</label>
+          <div class="img-upload-box">
+            <input type="file" id="editImgInput" accept="image/*" onchange="previewImg(this,'editImgPreview','editImgData')">
+            <div class="img-upload-label">📷 Click to upload image<br><span>JPG, PNG, WEBP supported</span></div>
+            <img id="editImgPreview" class="img-preview" alt="Preview">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="editName" placeholder="e.g. Height Growth Kit">
+        </div>
+        <div class="form-group">
+          <label>Price (Rs.)</label>
+          <input type="number" id="editPrice" placeholder="e.g. 2500">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="editDesc" placeholder="Short description..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Emoji / Icon (used if no image)</label>
+          <input type="text" id="editEmoji" placeholder="e.g. 🌿">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="editCategory">
+            <option>Height Growth</option>
+            <option>Hair Care</option>
+            <option>Weight Gain</option>
+            <option>Energy Booster</option>
+          </select>
+        </div>
+        <button class="btn-save" onclick="saveEdit()">💾 Save Changes</button>
+        <button style="width:100%; margin-top:8px; padding:10px; border:1.5px solid #ddd; border-radius:12px; background:#fff; cursor:pointer; font-size:.9rem;" onclick="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- ADD TAB -->
+    <div class="admin-section" id="tab-add">
+      <div class="edit-form">
+        <h3>Add New Product</h3>
+        <div class="form-group">
+          <label>Product Image</label>
+          <div class="img-upload-box">
+            <input type="file" id="newImgInput" accept="image/*" onchange="previewImg(this,'newImgPreview','newImgData')">
+            <div class="img-upload-label">📷 Click to upload image<br><span>JPG, PNG, WEBP supported</span></div>
+            <img id="newImgPreview" class="img-preview" alt="Preview">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="newName" placeholder="e.g. Energy Booster Capsules">
+        </div>
+        <div class="form-group">
+          <label>Price (Rs.)</label>
+          <input type="number" id="newPrice" placeholder="e.g. 1800">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="newDesc" placeholder="Describe the product benefits..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Emoji / Icon (used if no image)</label>
+          <input type="text" id="newEmoji" placeholder="e.g. ⚡">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="newCategory">
+            <option>Height Growth</option>
+            <option>Hair Care</option>
+            <option>Weight Gain</option>
+            <option>Energy Booster</option>
+          </select>
+        </div>
+        <button class="btn-save" onclick="addProduct()">➕ Add Product</button>
+      </div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div class="admin-section" id="tab-orders">
+      <button class="btn-add-new" onclick="toggleOrderForm()">➕ Add New Order</button>
+      <div class="edit-form" id="orderFormWrapper" style="display:none; margin-bottom:18px;">
+        <h3>New Order</h3>
+        <div class="form-group">
+          <label>Customer Name</label>
+          <input type="text" id="oName" placeholder="e.g. Ali Hassan">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" id="oPhone" placeholder="e.g. 0300-1234567">
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="oCity" placeholder="e.g. Lahore">
+        </div>
+        <div class="form-group">
+          <label>Product</label>
+          <select id="oProduct"></select>
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" id="oQty" value="1" min="1">
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="oPayment">
+            <option>Cash on Delivery</option>
+            <option>JazzCash</option>
+            <option>Easypaisa</option>
+            <option>Bank Transfer</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="oStatus">
+            <option>Pending</option>
+            <option>Shipped</option>
+            <option>Delivered</option>
+          </select>
+        </div>
+        <button class="btn-save" onclick="addOrder()">💾 Save Order</button>
+      </div>
+      <div id="ordersList"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUIZ MODAL -->
+<div id="quiz-overlay" style="display:none; position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#fff; border-radius:20px; padding:32px; max-width:440px; width:100%; position:relative;">
+    <button onclick="closeQuiz()" style="position:absolute; top:14px; right:14px; background:#eee; border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; font-size:1rem;">✕</button>
+    <h2 style="font-family:'Playfair Display',serif; margin-bottom:6px; color:var(--green);">🧠 Find Your Product</h2>
+    <p style="font-size:.87rem; color:var(--gray); margin-bottom:20px;">Answer 3 quick questions</p>
+    <div class="form-group"><label>Your Age</label><input id="q1" placeholder="e.g. 18"></div>
+    <div class="form-group"><label>Your Goal</label>
+      <select id="q2"><option>Increase Height</option><option>Hair Growth</option><option>Weight Gain</option><option>More Energy</option></select>
+    </div>
+    <div class="form-group"><label>How long have you been trying?</label>
+      <select id="q3"><option>Just starting</option><option>1-3 months</option><option>3-6 months</option><option>6+ months</option></select>
+    </div>
+    <button class="btn-save" onclick="getRecommendation()">Get My Recommendation →</button>
+    <div id="quiz-result" style="display:none; margin-top:18px; background:var(--green-pale); border-radius:12px; padding:16px;">
+      <div id="quiz-result-text" style="font-size:.93rem; color:var(--dark);"></div>
+      <a id="quiz-wa-btn" href="#" target="_blank" style="display:inline-block; margin-top:12px; background:#25d366; color:#fff; padding:10px 20px; border-radius:50px; font-size:.88rem; font-weight:600;">💬 Order on WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== PRODUCTS DATA =====
+let products = [
+  { id:1, name:'Height Growth Kit', price:2500, desc:'Supports natural height increase with herbal nutrients & bone strength.', emoji:'🌱', img:null, category:'Height Growth', rating:'4.9' },
+  { id:2, name:'Hair Care Serum', price:1500, desc:'Reduces hair fall, promotes thick & healthy hair growth naturally.', emoji:'💆', img:null, category:'Hair Care', rating:'4.8' },
+  { id:3, name:'Weight Gain Formula', price:2000, desc:'Healthy weight gain with natural herbs, proteins & appetite boost.', emoji:'💪', img:null, category:'Weight Gain', rating:'4.7' },
+  { id:4, name:'Energy Booster Capsules', price:1800, desc:'All-natural energy boost. No caffeine. Feel active all day long.', emoji:'⚡', img:null, category:'Energy Booster', rating:'4.8' },
+  { id:5, name:'Transformation Kit', price:3500, desc:'Complete 3-month herbal wellness pack for full body transformation.', emoji:'🌿', img:null, category:'Height Growth', rating:'5.0' },
+  { id:6, name:'Bone Strength Complex', price:2200, desc:'Calcium & herbal blend for stronger bones and better posture.', emoji:'🦴', img:null, category:'Height Growth', rating:'4.6' },
+];
+let nextId = 7;
+let editingId = null;
+let editImgData = null;
+let newImgData = null;
+
+// ===== ORDERS DATA =====
+let orders = [
+  { id:1, name:'Ahmed Raza', phone:'0300-1111111', city:'Lahore', product:'Height Growth Kit', qty:1, price:2500, payment:'Cash on Delivery', status:'Shipped' },
+  { id:2, name:'Fatima Noor', phone:'0321-2222222', city:'Karachi', product:'Hair Care Serum', qty:2, price:3000, payment:'JazzCash', status:'Pending' },
+];
+let nextOrderId = 3;
+
+// ===== IMAGE PREVIEW =====
+function previewImg(input, previewId, dataVar) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById(previewId);
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    if(dataVar === 'editImgData') editImgData = e.target.result;
+    if(dataVar === 'newImgData') newImgData = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = products.map(p => `
+    <div class="product-card">
+      ${p.img
+        ? `<img src="${p.img}" style="width:100%;height:200px;object-fit:cover;" alt="${p.name}">`
+        : `<div class="product-img">${p.emoji}</div>`
+      }
+      <div class="product-body">
+        <div class="product-badge">${p.category}</div>
+        <div class="product-title">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div>
+            <div class="price">Rs. ${Number(p.price).toLocaleString()}</div>
+            <div class="stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))} ${p.rating}</div>
+          </div>
+          <button class="btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}', ${p.price})">Order Now</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buyNow(name, price) {
+  const msg = encodeURIComponent(`Hello! I want to order *${name}* - Rs. ${price}. Please confirm availability and my order.`);
+  window.open(`https://wa.me/923107851364?text=${msg}`, '_blank');
+}
+
+// ===== ADMIN =====
+function openAdmin() {
+  document.getElementById('admin-overlay').style.display = 'block';
+  document.getElementById('admin-panel').style.display = 'flex';
+  renderAdminList();
+  renderOrdersList();
+  populateProductSelect();
+}
+function closeAdmin() {
+  document.getElementById('admin-overlay').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'none';
+}
+function switchTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach((t,i) => {
+    t.classList.toggle('active', ['products','add','orders'][i] === tab);
+  });
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+function renderAdminList() {
+  document.getElementById('adminProductList').innerHTML = products.map(p => `
+    <div class="admin-product-item">
+      ${p.img
+        ? `<img src="${p.img}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">`
+        : `<div class="prod-emoji">${p.emoji}</div>`
+      }
+      <div class="prod-info">
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-price">Rs. ${Number(p.price).toLocaleString()} · ${p.category}</div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn-edit" onclick="editProduct(${p.id})">✏️ Edit</button>
+        <button class="btn-delete" onclick="deleteProduct(${p.id})">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+function editProduct(id) {
+  const p = products.find(x => x.id === id);
+  editingId = id;
+  editImgData = p.img || null;
+  document.getElementById('editName').value = p.name;
+  document.getElementById('editPrice').value = p.price;
+  document.getElementById('editDesc').value = p.desc;
+  document.getElementById('editEmoji').value = p.emoji;
+  document.getElementById('editCategory').value = p.category;
+  const preview = document.getElementById('editImgPreview');
+  if(p.img){ preview.src = p.img; preview.style.display='block'; }
+  else { preview.style.display='none'; }
+  document.getElementById('editFormWrapper').style.display = 'block';
+  document.getElementById('editFormTitle').textContent = 'Editing: ' + p.name;
+  document.getElementById('editFormWrapper').scrollIntoView({ behavior:'smooth' });
+}
+function saveEdit() {
+  const p = products.find(x => x.id === editingId);
+  p.name = document.getElementById('editName').value || p.name;
+  p.price = document.getElementById('editPrice').value || p.price;
+  p.desc = document.getElementById('editDesc').value || p.desc;
+  p.emoji = document.getElementById('editEmoji').value || p.emoji;
+  p.category = document.getElementById('editCategory').value;
+  if(editImgData) p.img = editImgData;
+  cancelEdit();
+  renderAdminList();
+  renderProducts();
+  alert('✅ Product updated successfully!');
+}
+function cancelEdit() {
+  editingId = null; editImgData = null;
+  document.getElementById('editFormWrapper').style.display = 'none';
+  document.getElementById('editImgInput').value = '';
+  document.getElementById('editImgPreview').style.display = 'none';
+}
+function deleteProduct(id) {
+  if(confirm('Are you sure you want to delete this product?')) {
+    products = products.filter(x => x.id !== id);
+    renderAdminList(); renderProducts();
+  }
+}
+function addProduct() {
+  const name = document.getElementById('newName').value.trim();
+  const price = document.getElementById('newPrice').value;
+  const desc = document.getElementById('newDesc').value.trim();
+  const emoji = document.getElementById('newEmoji').value || '🌿';
+  const category = document.getElementById('newCategory').value;
+  if(!name || !price) { alert('Please fill in the product name and price.'); return; }
+  products.push({ id:nextId++, name, price:Number(price), desc, emoji, img:newImgData||null, category, rating:'4.5' });
+  document.getElementById('newName').value = '';
+  document.getElementById('newPrice').value = '';
+  document.getElementById('newDesc').value = '';
+  document.getElementById('newEmoji').value = '';
+  document.getElementById('newImgInput').value = '';
+  document.getElementById('newImgPreview').style.display = 'none';
+  newImgData = null;
+  renderProducts();
+  alert('✅ Product added successfully!');
+  switchTab('products');
+  renderAdminList();
+}
+
+// ===== ORDERS =====
+function toggleOrderForm() {
+  const f = document.getElementById('orderFormWrapper');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+function populateProductSelect() {
+  const sel = document.getElementById('oProduct');
+  if(!sel) return;
+  sel.innerHTML = products.map(p => `<option value="${p.name}|${p.price}">${p.name} – Rs.${p.price}</option>`).join('');
+}
+function addOrder() {
+  const name = document.getElementById('oName').value.trim();
+  const phone = document.getElementById('oPhone').value.trim();
+  const city = document.getElementById('oCity').value.trim();
+  const productVal = document.getElementById('oProduct').value;
+  const qty = parseInt(document.getElementById('oQty').value) || 1;
+  const payment = document.getElementById('oPayment').value;
+  const status = document.getElementById('oStatus').value;
+  if(!name || !phone) { alert('Please enter customer name and phone.'); return; }
+  const [prodName, prodPrice] = productVal.split('|');
+  orders.unshift({ id:nextOrderId++, name, phone, city, product:prodName, qty, price:Number(prodPrice)*qty, payment, status });
+  document.getElementById('oName').value=''; document.getElementById('oPhone').value='';
+  document.getElementById('oCity').value=''; document.getElementById('oQty').value='1';
+  document.getElementById('orderFormWrapper').style.display='none';
+  renderOrdersList();
+  alert('✅ Order saved!');
+}
+function changeStatus(id, newStatus) {
+  const o = orders.find(x=>x.id===id);
+  if(o) o.status = newStatus;
+  renderOrdersList();
+}
+function deleteOrder(id) {
+  if(confirm('Delete this order?')) {
+    orders = orders.filter(x=>x.id!==id);
+    renderOrdersList();
+  }
+}
+function renderOrdersList() {
+  const statusClass = { Pending:'status-pending', Shipped:'status-shipped', Delivered:'status-delivered' };
+  const statusIcon = { Pending:'⏳', Shipped:'🚚', Delivered:'✅' };
+  const list = document.getElementById('ordersList');
+  if(!list) return;
+  if(orders.length === 0) { list.innerHTML = '<p style="font-size:.88rem;color:var(--gray);">No orders yet. Add your first order above.</p>'; return; }
+  list.innerHTML = orders.map(o => `
+    <div class="order-item">
+      <div class="order-item-header">
+        <span class="order-item-name">Order #${String(o.id).padStart(3,'0')} – ${o.name}</span>
+        <span class="order-status ${statusClass[o.status]}">${statusIcon[o.status]} ${o.status}</span>
+      </div>
+      <div class="order-item-detail">${o.product} × ${o.qty} — Rs. ${Number(o.price).toLocaleString()}</div>
+      <div class="order-item-detail">📞 ${o.phone} · 📍 ${o.city} · 💳 ${o.payment}</div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn-status" onclick="changeStatus(${o.id},'Pending')">⏳ Pending</button>
+        <button class="btn-status" onclick="changeStatus(${o.id},'Shipped')">🚚 Shipped</button>
+        <button class="btn-status" onclick="changeStatus(${o.id},'Delivered')">✅ Delivered</button>
+        <button class="btn-delete" style="padding:4px 10px;font-size:.78rem;" onclick="deleteOrder(${o.id})">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== QUIZ =====
+function startQuiz() {
+  const overlay = document.getElementById('quiz-overlay');
+  overlay.style.display = 'flex';
+  document.getElementById('quiz-result').style.display = 'none';
+}
+function closeQuiz() {
+  document.getElementById('quiz-overlay').style.display = 'none';
+}
+function getRecommendation() {
+  const goal = document.getElementById('q2').value;
+  const map = {
+    'Increase Height': { name:'Height Growth Kit', price:2500 },
+    'Hair Growth': { name:'Hair Care Serum', price:1500 },
+    'Weight Gain': { name:'Weight Gain Formula', price:2000 },
+    'More Energy': { name:'Energy Booster Capsules', price:1800 },
+  };
+  const rec = map[goal];
+  document.getElementById('quiz-result-text').innerHTML =
+    `🌿 Based on your answers, we recommend:<br><strong>${rec.name}</strong> – Rs. ${rec.price}<br><span style="font-size:.82rem; color:var(--gray)">Click below to order via WhatsApp</span>`;
+  const msg = encodeURIComponent(`Hello! I took your quiz and was recommended *${rec.name}*. I'd like to order it!`);
+  document.getElementById('quiz-wa-btn').href = `https://wa.me/923107851364?text=${msg}`;
+  document.getElementById('quiz-result').style.display = 'block';
+}
+
+// ===== NAVBAR =====
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+// ===== INIT =====
+renderProducts();
+</script>
+</body>
+</html>
