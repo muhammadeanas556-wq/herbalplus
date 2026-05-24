@@ -388,7 +388,10 @@ footer .footer-links { display:flex; gap:18px; justify-content:center; flex-wrap
 <div id="admin-panel">
   <div class="admin-header">
     <h2>⚙️ Admin Panel</h2>
-    <button class="admin-close" onclick="closeAdmin()">✕</button>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button onclick="exportSite()" style="background:#c8972a;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:.78rem;cursor:pointer;font-weight:700;" title="Download updated website file to share">📤 Export & Share</button>
+      <span id="cloud-status" style="font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.15);display:none;"></span><button class="admin-close" onclick="closeAdmin()">✕</button>
+    </div>
   </div>
   <div class="admin-tabs">
     <div class="admin-tab active" onclick="switchTab('products')">🛍️ Products</div>
@@ -397,7 +400,9 @@ footer .footer-links { display:flex; gap:18px; justify-content:center; flex-wrap
     <div class="admin-tab" onclick="switchTab('bundles')">🎁 Bundles</div>
   </div>
   <div class="admin-body">
-
+<div style="background:#fffbea;border:1.5px solid #f0c96a;border-radius:10px;padding:11px 14px;margin-bottom:16px;font-size:.82rem;color:#5a4000;">
+  💡 <strong>How to share your website:</strong> After making changes, click <strong style="color:#c8972a;">📤 Export & Share</strong> at the top to download an updated HTML file. Send that file to anyone — they'll see everything!
+</div>
     <!-- PRODUCTS TAB -->
     <div class="admin-section active" id="tab-products">
       <p style="font-size:.85rem; color:var(--gray); margin-bottom:14px;">Tap <strong>Edit</strong> to change name/price or <strong>Delete</strong> to remove.</p>
@@ -608,34 +613,104 @@ const DEFAULT_BUNDLES = [
   { id:1, title:'Special Bundle Deal!', label1:'1 Bottle', price1:1600, label2:'2 Bottles', price2:3000, saving:'Save Rs. 200!' }
 ];
 
-// ===== LOAD FROM LOCALSTORAGE =====
-function loadData() {
-  try { return JSON.parse(localStorage.getItem('hp_products')) || DEFAULT_PRODUCTS; } catch(e) { return DEFAULT_PRODUCTS; }
-}
-function loadOrders() {
-  try { return JSON.parse(localStorage.getItem('hp_orders')) || DEFAULT_ORDERS; } catch(e) { return DEFAULT_ORDERS; }
-}
-function loadBundles() {
-  try { return JSON.parse(localStorage.getItem('hp_bundles')) || DEFAULT_BUNDLES; } catch(e) { return DEFAULT_BUNDLES; }
-}
-function saveData() { try { localStorage.setItem('hp_products', JSON.stringify(products)); } catch(e){} }
-function saveOrders() { try { localStorage.setItem('hp_orders', JSON.stringify(orders)); } catch(e){} }
-function saveBundles() { try { localStorage.setItem('hp_bundles', JSON.stringify(bundles)); } catch(e){} }
+// ===== JSONBIN.IO CLOUD DATABASE =====
+// HOW TO SETUP (one time only):
+// 1. Go to https://jsonbin.io and create a FREE account
+// 2. Click "Create Bin" and paste: {"products":[],"orders":[],"bundles":[]}
+// 3. Copy your BIN ID (looks like: 64abc123...) and paste below
+// 4. Go to Account > API Keys, create a key and paste below
+const JSONBIN_BIN_ID = '6a1319356877513b27c60b8f';       // ← paste your Bin ID here
+const JSONBIN_API_KEY = '$2a$10$JZhOdHX/gAyEQgaLHQVXruq3ZvHZiF8rotttOuEXxpXHQ.cPEYfS.';      // ← paste your API key here
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
-let products = loadData();
-let nextId = products.length ? Math.max(...products.map(p=>p.id))+1 : 1;
+let products = [...DEFAULT_PRODUCTS];
+let orders = [...DEFAULT_ORDERS];
+let bundles = [...DEFAULT_BUNDLES];
+let nextId = 7;
 let editingId = null;
 let editImgData = null;
 let newImgData = null;
-
-// ===== ORDERS DATA =====
-let orders = loadOrders();
-let nextOrderId = orders.length ? Math.max(...orders.map(o=>o.id))+1 : 1;
-
-// ===== BUNDLES DATA =====
-let bundles = loadBundles();
-let nextBundleId = bundles.length ? Math.max(...bundles.map(b=>b.id))+1 : 1;
+let nextOrderId = 3;
+let nextBundleId = 2;
 let editingBundleId = null;
+let _saving = false;
+
+async function loadFromCloud() {
+  if(JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
+    console.warn('⚠️ JSONBin not configured. Using default data. See setup instructions in the code.');
+    return;
+  }
+  try {
+    showCloudStatus('⏳ Loading data...', '#888');
+    const res = await fetch(JSONBIN_URL + '/latest', {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY }
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const record = data.record;
+    if(record.products && record.products.length) {
+      products = record.products;
+      nextId = Math.max(...products.map(p=>p.id))+1;
+    }
+    if(record.orders && record.orders.length) {
+      orders = record.orders;
+      nextOrderId = Math.max(...orders.map(o=>o.id))+1;
+    }
+    if(record.bundles && record.bundles.length) {
+      bundles = record.bundles;
+      nextBundleId = Math.max(...bundles.map(b=>b.id))+1;
+    }
+    renderProducts();
+    renderBundleBanner();
+    showCloudStatus('✅ Data synced!', '#1a6b3c');
+    setTimeout(() => hideCloudStatus(), 2000);
+  } catch(e) {
+    console.error('Cloud load failed:', e);
+    showCloudStatus('⚠️ Cloud unavailable – using local data', '#e53e3e');
+    setTimeout(() => hideCloudStatus(), 3000);
+  }
+}
+
+async function saveToCloud() {
+  if(JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') return;
+  if(_saving) return;
+  _saving = true;
+  showCloudStatus('💾 Saving...', '#f0c96a');
+  try {
+    const res = await fetch(JSONBIN_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_API_KEY
+      },
+      body: JSON.stringify({ products, orders, bundles })
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    showCloudStatus('✅ Saved to cloud!', '#1a6b3c');
+    setTimeout(() => hideCloudStatus(), 2000);
+  } catch(e) {
+    console.error('Cloud save failed:', e);
+    showCloudStatus('❌ Save failed! Check your API key.', '#e53e3e');
+  }
+  _saving = false;
+}
+
+function showCloudStatus(msg, color) {
+  let el = document.getElementById('cloud-status');
+  if(!el) return;
+  el.textContent = msg;
+  el.style.color = color;
+  el.style.display = 'block';
+}
+function hideCloudStatus() {
+  const el = document.getElementById('cloud-status');
+  if(el) el.style.display = 'none';
+}
+
+// Keep localStorage as fallback backup
+function saveData() { try { localStorage.setItem('hp_products', JSON.stringify(products)); } catch(e){} saveToCloud(); }
+function saveOrders() { try { localStorage.setItem('hp_orders', JSON.stringify(orders)); } catch(e){} saveToCloud(); }
+function saveBundles() { try { localStorage.setItem('hp_bundles', JSON.stringify(bundles)); } catch(e){} saveToCloud(); }
 
 // ===== IMAGE PREVIEW =====
 function previewImg(input, previewId, dataVar) {
@@ -983,9 +1058,56 @@ function toggleNav() {
   document.getElementById('navLinks').classList.toggle('open');
 }
 
+
+// ===== EXPORT SITE =====
+function exportSite() {
+  // Get the current HTML
+  let src = document.documentElement.outerHTML;
+
+  // Build the JS replacement that embeds current data
+  const escapedProducts = JSON.stringify(products).replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+  const escapedOrders = JSON.stringify(orders).replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+  const escapedBundles = JSON.stringify(bundles).replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+
+  // Replace the loadData/loadOrders/loadBundles calls with hardcoded data
+  src = src.replace(
+    /let products = loadData\(\);/,
+    'let products = ' + JSON.stringify(products) + ';'
+  );
+  src = src.replace(
+    /let orders = loadOrders\(\);/,
+    'let orders = ' + JSON.stringify(orders) + ';'
+  );
+  src = src.replace(
+    /let bundles = loadBundles\(\);/,
+    'let bundles = ' + JSON.stringify(bundles) + ';'
+  );
+  src = src.replace(
+    /let nextId = products\.length \? Math\.max\(\.\.\.products\.map\(p=>p\.id\)\)\+1 : 1;/,
+    'let nextId = ' + (products.length ? Math.max(...products.map(p=>p.id))+1 : 1) + ';'
+  );
+  src = src.replace(
+    /let nextOrderId = orders\.length \? Math\.max\(\.\.\.orders\.map\(o=>o\.id\)\)\+1 : 1;/,
+    'let nextOrderId = ' + (orders.length ? Math.max(...orders.map(o=>o.id))+1 : 1) + ';'
+  );
+  src = src.replace(
+    /let nextBundleId = bundles\.length \? Math\.max\(\.\.\.bundles\.map\(b=>b\.id\)\)\+1 : 1;/,
+    'let nextBundleId = ' + (bundles.length ? Math.max(...bundles.map(b=>b.id))+1 : 1) + ';'
+  );
+
+  const blob = new Blob([src], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'HerbalPlus_Website.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  alert('✅ Website downloaded! Share this HTML file with anyone — they will see all your latest products and bundles.');
+}
+
 // ===== INIT =====
 renderProducts();
 renderBundleBanner();
+loadFromCloud();
 </script>
 </body>
 </html>
