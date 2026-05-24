@@ -435,12 +435,7 @@ footer .footer-links { display:flex; gap:18px; justify-content:center; flex-wrap
         </div>
         <div class="form-group">
           <label>Category</label>
-          <select id="editCategory">
-            <option>Height Growth</option>
-            <option>Hair Care</option>
-            <option>Weight Gain</option>
-            <option>Energy Booster</option>
-          </select>
+          <input type="text" id="editCategory" placeholder="e.g. Hair Care, Height Growth...">
         </div>
         <button class="btn-save" onclick="saveEdit()">💾 Save Changes</button>
         <button style="width:100%; margin-top:8px; padding:10px; border:1.5px solid #ddd; border-radius:12px; background:#fff; cursor:pointer; font-size:.9rem;" onclick="cancelEdit()">Cancel</button>
@@ -477,12 +472,7 @@ footer .footer-links { display:flex; gap:18px; justify-content:center; flex-wrap
         </div>
         <div class="form-group">
           <label>Category</label>
-          <select id="newCategory">
-            <option>Height Growth</option>
-            <option>Hair Care</option>
-            <option>Weight Gain</option>
-            <option>Energy Booster</option>
-          </select>
+          <input type="text" id="newCategory" placeholder="e.g. Hair Care, Height Growth...">
         </div>
         <button class="btn-save" onclick="addProduct()">➕ Add Product</button>
       </div>
@@ -649,7 +639,15 @@ async function loadFromCloud() {
     const data = await res.json();
     const record = data.record;
     if(record.products && record.products.length) {
-      products = record.products;
+      products = record.products.map(p => {
+        // Restore locally stored images
+        if(p.img === '__local__') {
+          const localImg = localStorage.getItem('hp_img_' + p.id);
+          if(localImg) p.img = localImg;
+          else p.img = null;
+        }
+        return p;
+      });
       nextId = Math.max(...products.map(p=>p.id))+1;
     }
     if(record.orders && record.orders.length) {
@@ -677,13 +675,26 @@ async function saveToCloud() {
   _saving = true;
   showCloudStatus('💾 Saving...', '#f0c96a');
   try {
+    // Strip base64 images before saving (too large for cloud) - save image URLs separately in localStorage
+    const productsForCloud = products.map(p => {
+      const copy = Object.assign({}, p);
+      if(copy.img && copy.img.startsWith('data:')) {
+        try { localStorage.setItem('hp_img_' + p.id, copy.img); } catch(e){}
+        copy.img = '__local__';
+      }
+      return copy;
+    });
+    const payload = JSON.stringify({ products: productsForCloud, orders, bundles });
+    if(payload.length > 400000) {
+      showCloudStatus('⚠️ Data too large, saving text only', '#c8972a');
+    }
     const res = await fetch(JSONBIN_URL, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'X-Master-Key': JSONBIN_API_KEY
       },
-      body: JSON.stringify({ products, orders, bundles })
+      body: payload
     });
     if(!res.ok) throw new Error('HTTP ' + res.status);
     showCloudStatus('✅ Saved to cloud!', '#1a6b3c');
